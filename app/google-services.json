@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "678443498476",
+    "project_id": "webdealit",
+    "storage_bucket": "webdealit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:678443498476:android:dca82cf0d7e3ddd9e69ec9",
+        "android_client_info": {
+          "package_name": "com.otec.webdealit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "678443498476-bjktgnaqq4bs157u1fidfns548ah3qpi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIW60y5meYCKxXAJeIj95NmRK-Nmyd97U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "678443498476-bjktgnaqq4bs157u1fidfns548ah3qpi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

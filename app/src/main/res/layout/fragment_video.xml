@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UI.Video">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ProgressBar
+                    android:id="@+id/mainProgressbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="invisible" />
+
+                <VideoView
+                    android:id="@+id/videoPlayer"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="250dp" />
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/play"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="90dp"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/ic_baseline_play_circle_outline_24"
+                    android:paddingStart="12dp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/pause"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="90dp"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/ic_baseline_pause_circle_outline_24"
+                    android:paddingStart="12dp"
+                    android:visibility="invisible" />
+
+                <ImageView
+                    android:id="@+id/thumbnail"
+                    android:layout_width="300dp"
+                    android:layout_height="200dp"
+                    android:layout_margin="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/videoPlayer"
+                    android:scaleType="fitXY" />
+
+
+
+                <EditText
+                    android:id="@+id/videoTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/thumbnail"
+                    android:layout_margin="20dp"
+                    android:hint="Video title"
+                    android:textAllCaps="false" />
+
+
+                <EditText
+                    android:id="@+id/yearreleased"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/videoTitle"
+                    android:layout_margin="20dp"
+                    android:inputType="number"
+                    android:hint="Year Released"
+                    android:textAllCaps="false" />
+
+
+                <Spinner
+                    android:id="@+id/category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/yearreleased"
+                    android:layout_margin="20dp"
+                    android:text="Upload"
+                    android:textAllCaps="false" />
+
+
+                <GridLayout
+                    android:id="@+id/grid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/category">
+
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/videoChooser"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/videoPlayer"
+                        android:layout_margin="10dp"
+                        android:drawableEnd="@drawable/ic_baseline_video_library_24"
+                        android:text="Video"
+                        android:textAlignment="textStart"
+                        android:textAllCaps="false" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/thumbnailChooser"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/videoChooser"
+                        android:layout_margin="10dp"
+                        android:text="Thumbnail"
+                        android:textAllCaps="false" />
+
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/uploader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="Write up"
+                        android:textAllCaps="false" />
+
+                </GridLayout>
+
+
+                <ProgressBar
+                    android:id="@+id/spinnerProgressBar"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_below="@id/yearreleased"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginTop="10dp" />
+
+
+
+
+                <TextView
+                    android:id="@+id/progressCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/grid"
+                    android:layout_centerHorizontal="true"
+                    android:textAllCaps="false"
+                    android:textColor="#77FF00" />
+
+            </RelativeLayout>
+    </ScrollView>
+
+    </RelativeLayout>
+
+
+</FrameLayout>

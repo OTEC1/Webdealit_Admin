@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:title="Home"
+        android:icon="@drawable/ic_baseline_restore_page_24" />
+
+    <item
+        android:id="@+id/music"
+        android:title="Music"
+        android:icon="@drawable/ic_baseline_library_music_24" />
+
+    <item
+        android:id="@+id/video"
+        android:title="Video"
+        android:icon="@drawable/ic_baseline_video_library_24" />
+
+
+    <item
+        android:id="@+id/notify"
+        android:title="Notify"
+        android:icon="@drawable/ic_baseline_notifications_active_24" />
+
+
+    <item
+        android:id="@+id/Auth"
+        android:title="Auth"
+        android:icon="@drawable/ic_baseline_login_24" />
+
+
+
+</menu>

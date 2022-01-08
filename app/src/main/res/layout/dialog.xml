@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <EditText
+        android:id="@+id/writeUp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:hint="Movie WriteUp"
+        android:inputType="textMultiLine"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/writeUp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="Upload"
+        android:layout_marginBottom="30dp"
+        android:textAllCaps="false" />
+
+</RelativeLayout>
