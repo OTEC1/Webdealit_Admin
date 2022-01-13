@@ -88,7 +88,7 @@ public class Video extends Fragment {
 
     String TAG = "Video",categories="";
     Map<String, Object> containers;
-    int m=0;
+    int spin_direction,thumbnail_orientation;
     boolean started_payload = false, image_or_video = false;
 
 
@@ -119,7 +119,7 @@ public class Video extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                categories="";
+                categories="Select Categories";
             }
         });
 
@@ -129,6 +129,8 @@ public class Video extends Fragment {
 
 
         chooseThumbnail.setOnClickListener(w->{
+            thumbnail_orientation = 0;
+            spin_direction = 0;
             file_picker(1);
         });
 
@@ -349,8 +351,8 @@ public class Video extends Fragment {
     }
 
 
-
     private void send_data_to_s3(String writeUp, String p1, String p2, String p3) throws URISyntaxException {
+
 
         String fileName = videoTitle.getText().toString().replace(" ","".trim())+"_"+generate_name();
         List<Uri> path = new ArrayList<>();
@@ -360,7 +362,7 @@ public class Video extends Fragment {
 
 
                for (int x = 0; x < path.size(); x++) {
-                    AWSCredentials credentials = new BasicAWSCredentials(p1, p2);
+                   AWSCredentials credentials = new BasicAWSCredentials(p1, p2);
                     AmazonS3 s3 = new AmazonS3Client(credentials);
                     Security.setProperty("networkaddress.cache.ttl", "60");
                     s3.setRegion(Region.getRegion(Regions.EU_WEST_3));
@@ -368,7 +370,8 @@ public class Video extends Fragment {
                     TransferUtility transferUtility = new TransferUtility(s3, getActivity());
                     String d = Find.get_file_selected_path(path.get(x), getActivity());
                     String format = (x == 0) ?  "Stream_Thumbnails/"+fileName+".png" : "Stream_Videouploads/"+fileName+".mp4";
-                    TransferObserver trans = transferUtility.upload(p3, format.trim(), new File(d));
+                   assert d != null;
+                   TransferObserver trans = transferUtility.upload(p3, format.trim(), new File(d));
                     trans.setTransferListener(new TransferListener() {
                         @Override
                         public void onStateChanged(int id, TransferState state) {
@@ -397,9 +400,11 @@ public class Video extends Fragment {
 
                         @Override
                         public void onError(int id, Exception ex) {
-                            message(ex.getLocalizedMessage(), getActivity());
+                            message("S3= "+ ex.getLocalizedMessage(), getActivity());
                             mainProgressbar.setVisibility(View.GONE);
                             started_payload = false;
+                            if(s3.doesObjectExist(p3,format))
+                                   s3.deleteObject(p3,format);
 
                         }
 
@@ -407,7 +412,6 @@ public class Video extends Fragment {
 
              }
     }
-
 
 
     public int getCameraRotation(Context context, Uri uri, String path){
@@ -430,8 +434,6 @@ public class Video extends Fragment {
                     rotate = 180;
                     break;
             }
-            Log.i("RotateImage", "Exif orientation: " + orientation);
-            Log.i("RotateImage", "Rotate value: " + rotate);
 
         }catch (Exception e){
             Log.d(TAG, "getCameraRotation: "+e.getLocalizedMessage());
@@ -441,17 +443,19 @@ public class Video extends Fragment {
     }
 
 
-
     private void send_payload(String writeUp, String fileName) {
-        EchoToAPI(videoTitle.getText().toString(), yearReleased.getText().toString(), categories, writeUp, fileName);
+        if(thumbnail_orientation == 90)
+            spin_direction = 90;
+        else if(thumbnail_orientation == 270)
+            spin_direction = -90;
+        EchoToAPI(videoTitle.getText().toString(), Integer.parseInt(yearReleased.getText().toString()), categories, writeUp, fileName);
 
     }
 
 
-    private  void EchoToAPI(String Mtitle, String year, String categories, String writeUp, String fileName){
-
+    private  void EchoToAPI(String Mtitle, int year, String categories, String writeUp, String fileName){
         Calls sendMovies =  Base_config.getConnection().create(Calls.class);
-        SendMovies send = new SendMovies(Mtitle,year,categories,writeUp,fileName,0);
+        SendMovies send = new SendMovies(Mtitle,year,categories,writeUp,fileName,0,thumbnail_orientation,spin_direction);
         Call<SendMovies> sendMoviesCall =  sendMovies.sendMovie(send);
         sendMoviesCall.enqueue(new Callback<SendMovies>() {
             @Override
@@ -467,7 +471,7 @@ public class Video extends Fragment {
 
             @Override
             public void onFailure(Call<SendMovies> call, Throwable t) {
-                message(t.getLocalizedMessage(),getContext());
+                message("Firebase= "+t.getLocalizedMessage(),getContext());
 
             }
         });
@@ -486,6 +490,7 @@ public class Video extends Fragment {
 
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode,  Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -499,7 +504,8 @@ public class Video extends Fragment {
                     progressCount.setText("");
                     containers.put("IMG",imgUri);
                     try {
-                      message(String.valueOf(getCameraRotation(getContext(),imgUri,Find.get_file_selected_path(imgUri, getActivity()))),getContext());
+                       thumbnail_orientation =  getCameraRotation(getContext(),imgUri,Find.get_file_selected_path(imgUri, getActivity()));
+                       message(String.valueOf(getCameraRotation(getContext(),imgUri,Find.get_file_selected_path(imgUri, getActivity()))),getContext());
                     } catch (URISyntaxException e) {
                         e.printStackTrace();
                     }

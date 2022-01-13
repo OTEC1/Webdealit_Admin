@@ -5,11 +5,205 @@
     android:layout_height="match_parent"
     tools:context=".UI.Music">
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+
+    <ProgressBar
+        android:id="@+id/main_loader"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:visibility="invisible" />
 
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/musicThumb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/lemon" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="100">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="100">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <VideoView
+                        android:id="@+id/musicThumbnailView"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="10dp" />
+
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/play"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="90dp"
+                        android:background="@android:color/transparent"
+                        android:drawableStart="@drawable/ic_baseline_play_circle_outline_24"
+                        android:paddingStart="12dp" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/pause"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="90dp"
+                        android:background="@android:color/transparent"
+                        android:drawableStart="@drawable/ic_baseline_pause_circle_outline_24"
+                        android:paddingStart="12dp"
+                        android:visibility="invisible" />
+
+
+                    <TextView
+                        android:id="@+id/musicPathIndicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/musicThumbnailView"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/purple_500" />
+
+
+                    <ProgressBar
+                        android:id="@+id/Genre_loader"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_below="@id/musicThumbnailView"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="30dp" />
+
+                    <Spinner
+                        android:id="@+id/Genre"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/musicPathIndicator"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="20dp" />
+
+
+                    <ProgressBar
+                        android:id="@+id/country_loader"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_below="@id/Genre"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="15dp" />
+
+                    <Spinner
+                        android:id="@+id/Country"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/Genre"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp" />
+
+
+                    <EditText
+                        android:id="@+id/music_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/Country"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/registerline"
+                        android:hint="Music title"
+                        android:inputType="text"
+                        android:padding="5dp" />
+
+                    <EditText
+                        android:id="@+id/music_artist"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/music_title"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/registerline"
+                        android:hint="Music Artist"
+                        android:inputType="text"
+                        android:padding="5dp" />
+
+                    <EditText
+                        android:id="@+id/music_year"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/music_artist"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/registerline"
+                        android:hint="Release year"
+                        android:inputType="number"
+                        android:padding="5dp" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/chooseMusic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/music_year"
+                        android:layout_marginStart="20dp"
+                        android:drawableStart="@drawable/ic_baseline_library_music_24"
+                        android:text="Music"
+                        android:textAllCaps="false" />
+
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/thumbnail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/music_year"
+                        android:layout_centerHorizontal="true"
+                        android:drawableStart="@drawable/ic_baseline_library_music_24"
+                        android:text="Thumbnail"
+                        android:textAllCaps="false" />
+
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/upload"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/music_year"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="-3dp"
+                        android:layout_marginEnd="27dp"
+                        android:layout_marginRight="20dp"
+                        android:drawableStart="@drawable/ic_baseline_cloud_upload_24"
+                        android:text=" Upload"
+                        android:textAllCaps="false" />
+
+                    <TextView
+                        android:layout_below="@id/upload"
+                        android:layout_width="match_parent"
+                        android:layout_height="500dp"/>
+
+                </RelativeLayout>
+
+            </ScrollView>
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </FrameLayout>

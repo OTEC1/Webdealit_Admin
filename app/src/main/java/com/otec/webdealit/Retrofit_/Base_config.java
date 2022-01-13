@@ -2,8 +2,6 @@ package com.otec.webdealit.Retrofit_;
 
 import com.otec.webdealit.Utils.Constants;
 
-import java.util.concurrent.TimeUnit;
-
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -15,9 +13,9 @@ public class Base_config {
 
   public  static  Retrofit getConnection(){
       OkHttpClient okHttpClient = new OkHttpClient.Builder()
-              .connectTimeout(50, TimeUnit.SECONDS)
-              .readTimeout(50,TimeUnit.SECONDS)
-              .writeTimeout(50,TimeUnit.SECONDS)
+//              .connectTimeout(90, TimeUnit.SECONDS)
+//              .readTimeout(50,TimeUnit.SECONDS)
+//              .writeTimeout(50,TimeUnit.SECONDS)
               .build();
 
       if (retrofit == null){
