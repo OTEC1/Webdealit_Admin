@@ -4,6 +4,7 @@ import com.otec.webdealit.model.Auth;
 import com.otec.webdealit.model.Music_Response;
 import com.otec.webdealit.model.Music_Upload;
 import com.otec.webdealit.model.SendMovies;
+import com.otec.webdealit.model.ViewCount;
 import com.otec.webdealit.model.listOfmoviecategories;
 
 import java.util.Map;
@@ -33,6 +34,16 @@ public interface Calls {
 
     @GET("Webdealit_Genre")
     Call<Music_Response>  getGenre();
+
+
+
+    @GET("webdealitVisitGetCount")
+    Call<ViewCount>  getVisitCountWebfly();
+
+
+
+    @GET("https://us-central1-chau02-b4019.cloudfunctions.net/Zlearner/LearnGetvisitcount")
+    Call<ViewCount>  getVisitCountNetwork();
 
 
 

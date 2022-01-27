@@ -207,11 +207,11 @@ public class Music extends Fragment {
 
 
             } else {
-                if (containers.get("Mus") != null && containers.get("Vid") != null)
+                if (containers.get("Mus") != null && containers.get("Vid") != null) {
                     image_or_video = true;
-
-                music_thumbnail.setText("OK");
-                containers.put("Img", uri);
+                    music_thumbnail.setText("OK");
+                    containers.put("Img", uri);
+                }
 
             }
         }
@@ -293,7 +293,6 @@ public class Music extends Fragment {
             s3.setRegion(Region.getRegion(Regions.EU_WEST_3));
             //s3.setObjectAcl("", ".png", CannedAccessControlList.PublicRead);
             TransferUtility transferUtility = new TransferUtility(s3, getActivity());
-            String d = Find.get_file_selected_path(path.get(x), getActivity());
             String format = "";
             final int xb = x;
             if (xb == 0)
@@ -303,9 +302,7 @@ public class Music extends Fragment {
             else
                 format = "Music_fileuploads/" + fileName + ".mp3";
 
-
-            assert d != null;
-            TransferObserver trans = transferUtility.upload(p3, format.trim(), new File(d));
+            TransferObserver trans = transferUtility.upload(p3, format.trim(), new File(Find.get_file_selected_path(path.get(xb), getActivity())));
             String finalFormat = format;
             trans.setTransferListener(new TransferListener() {
                 @Override
@@ -359,20 +356,17 @@ public class Music extends Fragment {
         music.put("name","Admin");
         music.put("email","Admin@gmail.com");
         music.put("music_thumbnail",format);
-        music.put("music_video",format.replace("Music_Thumbnails","Music_Videouploads").replace(".png",".mp4"));
-        music.put("music_title",title);
-        music.put("music_url",format.replace("Music_Thumbnails","Music_fileuploads").replace(".png",".mp3"));
+        music.put("music_video",format.replace("Music_Thumbnails","Music_Videouploads").replace(".png",".mp4").trim());
+        music.put("music_title",title.toLowerCase());
+        music.put("music_url",format.replace("Music_Thumbnails","Music_fileuploads").replace(".png",".mp3").trim());
         music.put("music_artist", artist);
         music.put("music_year",year);
         music.put("downloadCount",0);
         music.put("viewCount",0);
         music.put("userType","admin");
         music.put("flag",true);
-
-        Log.d(TAG, "send_payload: "+music);
         Map<String,Object> musicObj = new HashMap<>();
         musicObj.put("Music",music);
-        Log.d(TAG, "send_payload: "+musicObj);
         SEND_MUSIC(musicObj);
 
     }

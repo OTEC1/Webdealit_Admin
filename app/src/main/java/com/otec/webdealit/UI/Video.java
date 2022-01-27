@@ -1,17 +1,11 @@
 package com.otec.webdealit.UI;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,10 +21,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.amazonaws.auth.AWSCredentials;
@@ -58,7 +48,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -66,7 +55,6 @@ import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 import static com.otec.webdealit.Utils.Constants.PICK_IMAGE;
-import static com.otec.webdealit.Utils.Constants.READ_STORAGE_PERMISSION_REQUEST_CODE;
 import static com.otec.webdealit.Utils.utils.message;
 
 
@@ -101,9 +89,6 @@ public class Video extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view  =  inflater.inflate(R.layout.fragment_video, container, false);
-
-        STRICT_POLICY();
-        CHECK_POLICY();
         API_MOVIES_LIST_CALL();
         Mapping(view);
         DIALOG();
@@ -193,69 +178,6 @@ public class Video extends Fragment {
     }
 
 
-
-
-    //----------------------------------------------Permission for file sharing ---------------------------------------------//
-    //Step 1
-    public void STRICT_POLICY() {
-        int SDK_INT = android.os.Build.VERSION.SDK_INT;
-        if (SDK_INT > 8) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
-    }
-
-
-    //Step 2
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public void CHECK_POLICY() {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-
-        } else
-            request_permission();
-    }
-
-
-    //Step 3
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void request_permission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(
-                getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            new AlertDialog.Builder(getActivity())
-                    .setTitle("Permission needed")
-                    .setMessage("This Permission is needed for file sharing")
-                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            ActivityCompat.requestPermissions((Activity) getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_STORAGE_PERMISSION_REQUEST_CODE);
-                        }
-                    }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            }).create().show();
-        } else {
-            ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_STORAGE_PERMISSION_REQUEST_CODE);
-
-        }
-    }
-
-
-    //Step 4
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == READ_STORAGE_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                message("Permission Granted", getActivity());
-            else
-                message("Permission Denied", getActivity());
-
-        }
-
-    }
-    //----------------------------------------------End of file sharing ---------------------------------------------//
 
 
 
@@ -362,16 +284,23 @@ public class Video extends Fragment {
 
 
                for (int x = 0; x < path.size(); x++) {
+
+                   String d = Find.get_file_selected_path(path.get(x), getActivity());
+                   String format;
+
+                   if(x == 0)
+                       format ="Stream_Thumbnails/"+fileName+".png";
+                   else
+                       format = "Stream_Videouploads/"+fileName+".mp4";
+
                    AWSCredentials credentials = new BasicAWSCredentials(p1, p2);
                     AmazonS3 s3 = new AmazonS3Client(credentials);
                     Security.setProperty("networkaddress.cache.ttl", "60");
                     s3.setRegion(Region.getRegion(Regions.EU_WEST_3));
                     //s3.setObjectAcl("", ".png", CannedAccessControlList.PublicRead);
                     TransferUtility transferUtility = new TransferUtility(s3, getActivity());
-                    String d = Find.get_file_selected_path(path.get(x), getActivity());
-                    String format = (x == 0) ?  "Stream_Thumbnails/"+fileName+".png" : "Stream_Videouploads/"+fileName+".mp4";
-                   assert d != null;
-                   TransferObserver trans = transferUtility.upload(p3, format.trim(), new File(d));
+                    assert d != null;
+                    TransferObserver trans = transferUtility.upload(p3, format.trim(), new File(d));
                     trans.setTransferListener(new TransferListener() {
                         @Override
                         public void onStateChanged(int id, TransferState state) {
@@ -388,8 +317,6 @@ public class Video extends Fragment {
                                 progressCount.setText("Uploaded");
                                 if(started_payload)
                                     send_payload(writeUp,fileName);
-                                videoTitle.setText("");
-                                yearReleased.setText("");
                                 started_payload = false;
                                 mainProgressbar.setVisibility(View.GONE);
 
@@ -455,7 +382,7 @@ public class Video extends Fragment {
 
     private  void EchoToAPI(String Mtitle, int year, String categories, String writeUp, String fileName){
         Calls sendMovies =  Base_config.getConnection().create(Calls.class);
-        SendMovies send = new SendMovies(Mtitle,year,categories,writeUp,fileName,0,thumbnail_orientation,spin_direction);
+        SendMovies send = new SendMovies(Mtitle.toLowerCase(),year,categories,writeUp,fileName,0,thumbnail_orientation,spin_direction,0);
         Call<SendMovies> sendMoviesCall =  sendMovies.sendMovie(send);
         sendMoviesCall.enqueue(new Callback<SendMovies>() {
             @Override

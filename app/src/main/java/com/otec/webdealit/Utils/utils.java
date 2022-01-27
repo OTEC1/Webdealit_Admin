@@ -25,7 +25,6 @@ import com.bumptech.glide.request.target.Target;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.otec.webdealit.R;
-import com.otec.webdealit.UI.MainActivity;
 import com.otec.webdealit.UI.Music;
 import com.otec.webdealit.UI.Notify;
 import com.otec.webdealit.UI.SignUp;
@@ -111,14 +110,6 @@ public class utils {
 
         bottomNav.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id.home:
-                    progressBar.setVisibility(View.VISIBLE);
-                    if (SIGN_IN_USER()) {
-                        appCompatActivity.startActivity(new Intent(appCompatActivity, MainActivity.class));
-                        progressBar.setVisibility(View.INVISIBLE);
-                        return true;
-                    } else
-                        message("Pls sign in",appCompatActivity);
 
                 case R.id.music:
                     progressBar.setVisibility(View.VISIBLE);
