@@ -127,14 +127,16 @@ public class MainActivity extends AppCompatActivity {
 
         upload.setOnClickListener(v -> {
             String format =   generate_name() + new UUID(System.currentTimeMillis(),System.nanoTime())+".png";
-            if(!title.getText().toString().isEmpty() && !writeup.getText().toString().isEmpty() && uri!= null && youtube.getText().toString().trim().isEmpty())
+            if(!title.getText().toString().isEmpty() && !writeup.getText().toString().isEmpty() && uri!= null && youtube.getText().toString().trim().isEmpty() && !tab.equals("Select Option"))
                 AWS(uri,format,p1,p2,p3,tab,1);
             else
-              if(!title.getText().toString().isEmpty() && !writeup.getText().toString().isEmpty() && uri == null && !youtube.getText().toString().trim().isEmpty())
+              if(!title.getText().toString().isEmpty() && !writeup.getText().toString().isEmpty() && uri == null && !youtube.getText().toString().trim().isEmpty()  && !tab.equals("Select Option"))
                   AWS(uri,format,p1,p2,p3,tab,2);
             else
                 message("Pls fill out  both fields and indicate", getApplicationContext());
         });
+
+
     }
 
 
@@ -180,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else
                     if(n == 2)
-                       sendRequest(format, "", youtube.getText().toString(), "Webdealz/"+FirebaseAuth.getInstance().getCurrentUser().getEmail()+"/"+format, tab);
+                       sendRequest(format, "", youtube.getText().toString(), "", tab);
     }
 
 
@@ -214,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
         m3.put("User",m1);
         m3.put("UserPost",m2);
 
+
         API_POST(1,m3,BASE_URL_S3 + img,cloud);
 
     }
@@ -221,35 +224,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void  API_POST(int n,Map<String,Object> post,String url,String cloud){
         if(n == 1) {
-
             Calls call = Base_config.getConnection().create(Calls.class);
             Call<Object> obj = call.addPost(post);
             obj.enqueue(new Callback<Object>() {
                 @Override
                 public void onResponse(Call<Object> call, Response<Object> response) {
-                    message(String.valueOf(response.body()), getApplicationContext());
-                    upload.setEnabled(true);
-                  clear();
-                }
-                @Override
-                public void onFailure(Call<Object> call, Throwable t) {
-                    message(t.getLocalizedMessage(), getApplicationContext());
-                }
-            });
-
-        }else
-            {
-
-            Calls call = Base_config.getConnection().create(Calls.class);
-            Map<String,Object> urls = new HashMap<>();
-            urls.put("url",url);
-            urls.put("publicface",cloud);
-            Call<Object> obj = call.addimg(urls);
-            obj.enqueue(new Callback<Object>() {
-
-                @Override
-                public void onResponse(Call<Object> call, Response<Object> response) {
-                    message(String.valueOf(response.body()), getApplicationContext());
                     upload.setEnabled(true);
                     clear();
                 }
@@ -259,16 +238,38 @@ public class MainActivity extends AppCompatActivity {
                     message(t.getLocalizedMessage(), getApplicationContext());
                 }
             });
-        }
+
+
+            if (cloud.trim().length() > 0) {
+
+                        Calls caller = Base_config.getConnection().create(Calls.class);
+                        Map<String, Object> urls = new HashMap<>();
+                        urls.put("url", url);
+                        urls.put("publicface", cloud);
+                        Call<Object> objs = caller.addimg(urls);
+                        objs.enqueue(new Callback<Object>() {
+
+                        @Override
+                        public void onResponse(Call<Object> call, Response<Object> response) {
+                            message(String.valueOf(response.body()), getApplicationContext());
+                            upload.setEnabled(true);
+                            clear();
+                        }
+
+                        @Override
+                        public void onFailure(Call<Object> call, Throwable t) {
+                            message(t.getLocalizedMessage(), getApplicationContext());
+                        }
+                    });
+                }
+         }
     }
-
-
-
 
 
     private  void clear(){
         title.setText(""); writeup.setText(""); youtube.setText("");
     }
+
 
     private void API_CALL() {
             Calls call = Base_config.getConnection().create(Calls.class);
@@ -289,7 +290,9 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+
     private void CarryOn(List<Object> body) {
+        body.add(0,"Select Option");
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, body);
         adapter.setDropDownViewResource(R.layout.text_pad);
         adapter.notifyDataSetChanged();
@@ -308,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
         post_cat_loader = findViewById(R.id.post_cat_loader);
         youtube = findViewById(R.id.youtubelink);
     }
+
 
     public String generate_name() {
         long x = System.currentTimeMillis();
