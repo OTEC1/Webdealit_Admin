@@ -1,25 +1,20 @@
 package com.otec.webdealit.model;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+import java.util.Map;
+
 public class ViewCount {
     
-    int  count;
-    String date;
 
 
+    @SerializedName(("message"))
+    List <Map<String,Object>> list;
 
-    public int getCount() {
-        return count;
+    public List<Map<String,Object>> getList() {
+        return list;
     }
 
-    public void setCount(int count) {
-        this.count = count;
-    }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
 }

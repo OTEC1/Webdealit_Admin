@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
@@ -25,10 +24,24 @@ import com.bumptech.glide.request.target.Target;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.otec.webdealit.R;
+import com.otec.webdealit.Retrofit_.Base_config;
+import com.otec.webdealit.Retrofit_.Calls;
+import com.otec.webdealit.UI.MainActivity;
 import com.otec.webdealit.UI.Music;
 import com.otec.webdealit.UI.Notify;
 import com.otec.webdealit.UI.SignUp;
 import com.otec.webdealit.UI.Video;
+import com.otec.webdealit.model.Auth;
+
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.otec.webdealit.Utils.Constants.p1;
+import static com.otec.webdealit.Utils.Constants.p2;
+import static com.otec.webdealit.Utils.Constants.p3;
 
 public class utils {
 
@@ -47,13 +60,25 @@ public class utils {
 
 
 
-    //open from  fragment
-    public void openFragments(Fragment fragment, FragmentActivity appCompatActivity, Bundle s) {
-        FragmentTransaction fragmentTransaction = appCompatActivity.getSupportFragmentManager().beginTransaction();
-        fragment.setArguments(s);
-        fragmentTransaction.replace(R.id.frameLayout, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+
+    public void credentials(Context context) {
+        Calls call = Base_config.getConnection().create(Calls.class);
+        Call<Auth> obj = call.getAuth();
+        obj.enqueue(new Callback<Auth>() {
+            @Override
+            public void onResponse(Call<Auth> call, Response<Auth> response) {
+                Map<String, Object> task = response.body().getList2();
+                p1 = task.get("p1").toString();
+                p2 = task.get("p2").toString();
+                p3 = task.get("p3").toString();
+            }
+
+            @Override
+            public void onFailure(Call<Auth> call, Throwable t) {
+                message(t.getLocalizedMessage(), context);
+            }
+        });
+
     }
 
 
@@ -69,19 +94,7 @@ public class utils {
 
 
 
-
-
-    //Open Fragment from  Adapter Class
-    public void open_Fragment(Fragment fragments, String tag, Context view, Bundle bundle, int d) {
-        AppCompatActivity activity = (AppCompatActivity) view;
-        Fragment myfrag = fragments;
-        myfrag.setArguments(bundle);
-        activity.getSupportFragmentManager().beginTransaction().replace(d, myfrag, tag).addToBackStack(null).commit();
-
-    }
-
-
-    public void Img_streamer(Context context, String url, ProgressBar progressBar_img, ImageView vendor_img) {
+    public void img_streaming(Context context, String url, ProgressBar progressBar_img, ImageView vendor_img) {
         RequestOptions requestOptions = new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true);
@@ -110,6 +123,17 @@ public class utils {
 
         bottomNav.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
+
+
+                case R.id.home:
+                    progressBar.setVisibility(View.VISIBLE);
+                    if (SIGN_IN_USER()) {
+                        progressBar.getContext().startActivity(new Intent(progressBar.getContext(), MainActivity.class));
+                        progressBar.setVisibility(View.INVISIBLE);
+                        return true;
+                    } else
+                        message("Pls sign in",appCompatActivity);
+
 
                 case R.id.music:
                     progressBar.setVisibility(View.VISIBLE);

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/frameLayout"
     tools:context=".UI.Notify">
 
 
@@ -15,23 +16,30 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/webfly"
-            android:layout_width="200dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
-            android:text="Webfly.click"
-            android:textAllCaps="false" />
+            android:text="WEBFLY.click" />
 
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/networkingProgramming"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/webfly"
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
-            android:text="NetworkingProgramming.info"
-            android:textAllCaps="false" />
+            android:text="NetworkingProgramming.info" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/boat"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/networkingProgramming"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:text="boatcurise.holiday" />
     </RelativeLayout>
 
 

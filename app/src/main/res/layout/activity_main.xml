@@ -14,8 +14,6 @@
         android:weightSum="100">
 
 
-
-
         <FrameLayout
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
@@ -23,12 +21,110 @@
             android:layout_weight="100">
 
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+                <EditText
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/registerline"
+                    android:hint="Title"
+                    android:padding="5dp" />
+
+                <EditText
+                    android:id="@+id/Writeup"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_below="@+id/title"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/registerline"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:hint="Writeup"
+                    android:inputType="textMultiLine"
+                    android:padding="10dp" />
+
+
+                <EditText
+                    android:id="@+id/youtubelink"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/Writeup"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/registerline"
+                    android:hint="Youtube link"
+                    android:padding="10dp" />
+
+
+                <Spinner
+                    android:id="@+id/post_Category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/youtubelink"
+                    android:layout_margin="20dp" />
+
+
+                <ProgressBar
+                    android:id="@+id/post_cat_loader"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_below="@id/youtubelink"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp" />
+
+                <GridLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/post_Category"
+                    android:layout_centerHorizontal="true"
+                    android:columnCount="3"
+                    android:rowCount="1">
+
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/chooseImg"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:text="Choose image"
+                        android:textAllCaps="false" />
+
+
+                    <TextView
+                        android:id="@+id/progress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="20dp"
+                        android:textAllCaps="false"
+                        android:textColor="#6BFF00" />
+
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/upload"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:text="Upload"
+                        android:textAllCaps="false" />
+
+
+                </GridLayout>
+
+            </RelativeLayout>
+
+
             <ProgressBar
                 android:id="@+id/progressBar"
-                android:visibility="invisible"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_height="wrap_content"/>
+                android:visibility="invisible" />
 
         </FrameLayout>
 
@@ -42,7 +138,6 @@
             app:menu="@menu/bottom_nav_menu" />
 
     </LinearLayout>
-
 
 
 </RelativeLayout>

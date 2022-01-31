@@ -47,6 +47,25 @@ public interface Calls {
 
 
 
+    @GET("/")
+    Call<ViewCount>  getVisitCountboaT();
+
+
+
+    @GET("webdealitHomePageTopList")
+    Call<Music_Response>  get_web_fly_TopList();
+
+
+
+
+    @POST("webdealitAddPost")
+    Call<Object>  addPost(@Body Map<String,Object> objectMap);
+
+
+
+    @POST("ImgResize")
+    Call<Object>  addimg(@Body Map<String,Object> objectMap);
+
 
 
 

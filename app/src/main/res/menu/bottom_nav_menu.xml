@@ -4,6 +4,12 @@
 
 
     <item
+        android:id="@+id/home"
+        android:title="Music"
+        android:icon="@drawable/ic_baseline_post_add_24" />
+
+
+    <item
         android:id="@+id/music"
         android:title="Music"
         android:icon="@drawable/ic_baseline_library_music_24" />

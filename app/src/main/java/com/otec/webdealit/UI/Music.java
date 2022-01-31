@@ -39,7 +39,6 @@ import com.otec.webdealit.R;
 import com.otec.webdealit.Retrofit_.Base_config;
 import com.otec.webdealit.Retrofit_.Calls;
 import com.otec.webdealit.Utils.Find;
-import com.otec.webdealit.model.Auth;
 import com.otec.webdealit.model.Music_Response;
 import com.otec.webdealit.model.Music_Upload;
 
@@ -57,6 +56,9 @@ import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 import static com.otec.webdealit.Utils.Constants.SELECT_VIDEO;
+import static com.otec.webdealit.Utils.Constants.p1;
+import static com.otec.webdealit.Utils.Constants.p2;
+import static com.otec.webdealit.Utils.Constants.p3;
 import static com.otec.webdealit.Utils.utils.message;
 
 
@@ -142,7 +144,12 @@ public class Music extends Fragment {
                         if (!genreStringSelector.equals("Select Music Genre")) {
                             mainProgressbar.setVisibility(View.VISIBLE);
                             started_payload = true;
-                            credentials();
+                            try {
+                                send_data_to_s3(musicArtist.getText().toString(), Integer.parseInt(musicYear.getText().toString()), musicTitle.getText().toString(), p1, p2, p3);
+                            } catch (URISyntaxException uriSyntaxException) {
+                                Log.d(TAG, "onCreateView: "+uriSyntaxException.getLocalizedMessage());
+                            }
+
                         } else
                             message("Pls select music Genre", getActivity());
                     } else
@@ -224,27 +231,6 @@ public class Music extends Fragment {
     }
 
 
-    private void credentials() {
-        Calls call = Base_config.getConnection().create(Calls.class);
-        Call<Auth> obj = call.getAuth();
-        obj.enqueue(new Callback<Auth>() {
-            @Override
-            public void onResponse(Call<Auth> call, Response<Auth> response) {
-                Map<String, Object> task = response.body().getList2();
-                try {
-                    send_data_to_s3(musicArtist.getText().toString(), Integer.parseInt(musicYear.getText().toString()), musicTitle.getText().toString(), task.get("p1").toString(), task.get("p2").toString(), task.get("p3").toString());
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Auth> call, Throwable t) {
-                message(t.getLocalizedMessage(), getContext());
-            }
-        });
-
-    }
 
 
     private void GENRE_CALL() {
@@ -278,6 +264,7 @@ public class Music extends Fragment {
 
     private void send_data_to_s3(String artist, int year, String title, String p1, String p2, String p3) throws URISyntaxException {
 
+        String format = "";
 
         String fileName = title.replace(" ","_") + "_" + generate_name();
         List<Uri> path = new ArrayList<>();
@@ -287,71 +274,70 @@ public class Music extends Fragment {
 
 
         for (int x = 0; x < path.size(); x++) {
-            AWSCredentials credentials = new BasicAWSCredentials(p1, p2);
-            AmazonS3 s3 = new AmazonS3Client(credentials);
-            Security.setProperty("networkaddress.cache.ttl", "60");
-            s3.setRegion(Region.getRegion(Regions.EU_WEST_3));
-            //s3.setObjectAcl("", ".png", CannedAccessControlList.PublicRead);
-            TransferUtility transferUtility = new TransferUtility(s3, getActivity());
-            String format = "";
             final int xb = x;
-            if (xb == 0)
+            if (xb == 0) {
                 format = "Music_Thumbnails/" + fileName + ".png";
-            else if (xb == 1)
+                AWS(path.get(0),format,p1,p2,p3);
+            }else if (xb == 1) {
                 format = "Music_Videouploads/" + fileName + ".mp4";
-            else
+                AWS(path.get(1),format,p1,p2,p3);
+            }else  if(xb == path.size()-1){
                 format = "Music_fileuploads/" + fileName + ".mp3";
+                AWS(path.get(path.size()-1),format,p1,p2,p3);
+            }
 
-            TransferObserver trans = transferUtility.upload(p3, format.trim(), new File(Find.get_file_selected_path(path.get(xb), getActivity())));
-            String finalFormat = format;
-            trans.setTransferListener(new TransferListener() {
-                @Override
-                public void onStateChanged(int id, TransferState state) {
-
-                }
-
-                @Override
-                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                    float percentDone = ((float) bytesCurrent / (float) bytesTotal) * 100;
-                    int percentDo = (int) percentDone;
-                    progressCount.setText("Uploading... " + percentDo + "%");
-                        if (started_payload) {
-                            send_payload(artist, year, title,finalFormat);
-                            if (xb == 0)
-                                progressCount.setText("Image uploaded Pls wait video file uploading...");
-                            else if (xb == 1)
-                                progressCount.setText("Music video uploaded Pls wait music file uploading...");
-                            else {
-                                progressCount.setText("Upload complete");
-                                musicTitle.setText("");
-                                musicYear.setText("");
-                                musicArtist.setText("");
-                            }
-                        }
-                        started_payload = false;
-                        mainProgressbar.setVisibility(View.GONE);
-
-                }
-
-
-                @Override
-                public void onError(int id, Exception ex) {
-                    message("S3= " + ex.getLocalizedMessage(), getActivity());
-                    mainProgressbar.setVisibility(View.GONE);
-                    started_payload = false;
-                    if (s3.doesObjectExist(p3, finalFormat))
-                        s3.deleteObject(p3, finalFormat);
-
-                }
-
-            });
-
+            if (started_payload) {
+                send_payload(artist, year, title, format);
+                progressCount.setText("Upload complete");
+                started_payload = false;
+            }
         }
     }
 
 
-    private void send_payload(String artist, int year, String title, String format) {
 
+    private void AWS(Uri path, String format, String p1, String p2, String p3){
+        AWSCredentials credentials = new BasicAWSCredentials(p1, p2);
+        AmazonS3 s3 = new AmazonS3Client(credentials);
+        Security.setProperty("networkaddress.cache.ttl", "60");
+        s3.setRegion(Region.getRegion(Regions.EU_WEST_3));
+        TransferUtility transferUtility = new TransferUtility(s3, getActivity());
+        TransferObserver trans = null;
+        try {
+            trans = transferUtility.upload(p3, format.trim(), new File(Find.get_file_selected_path(path, getActivity())));
+        } catch (URISyntaxException e) {
+            Log.d(TAG, "AWS: "+ e.getLocalizedMessage());
+        }
+
+        trans.setTransferListener(new TransferListener() {
+            @Override
+            public void onStateChanged(int id, TransferState state) {
+
+            }
+
+            @Override
+            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                float percentDone = ((float) bytesCurrent / (float) bytesTotal) * 100;
+                int percentDo = (int) percentDone;
+                progressCount.setText("Uploading... " + percentDo + "%");
+                mainProgressbar.setVisibility(View.GONE);
+            }
+
+
+            @Override
+            public void onError(int id, Exception ex) {
+                message("S3= " + ex.getLocalizedMessage(), getActivity());
+                mainProgressbar.setVisibility(View.GONE);
+                started_payload = false;
+                if (s3.doesObjectExist(p3, format))
+                    s3.deleteObject(p3, format);
+            }
+        });
+    }
+
+
+
+    private void send_payload(String artist, int year, String title, String format) {
         Map<String,Object> music = new HashMap<>();
         music.put("name","Admin");
         music.put("email","Admin@gmail.com");
@@ -365,6 +351,7 @@ public class Music extends Fragment {
         music.put("viewCount",0);
         music.put("userType","admin");
         music.put("flag",true);
+        music.put("genre",genreStringSelector);
         Map<String,Object> musicObj = new HashMap<>();
         musicObj.put("Music",music);
         SEND_MUSIC(musicObj);
@@ -378,9 +365,11 @@ public class Music extends Fragment {
         obj.enqueue(new Callback<Music_Upload>() {
             @Override
             public void onResponse(Call<Music_Upload> call, Response<Music_Upload> response) {
-
                 assert response.body() != null;
                 message(response.body().getResponse().toString(),getContext());
+                musicTitle.setText("");
+                musicYear.setText("");
+                musicArtist.setText("");
             }
 
             @Override
@@ -390,8 +379,6 @@ public class Music extends Fragment {
             }
         });
     }
-
-
 
 
 

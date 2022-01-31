@@ -11,7 +11,7 @@ import com.otec.webdealit.R;
 
 public class Notify extends AppCompatActivity {
 
-    private Button webfly,network;
+    private Button webfly,network,boat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +21,7 @@ public class Notify extends AppCompatActivity {
 
         webfly  = findViewById(R.id.webfly);
         network  = findViewById(R.id.networkingProgramming);
+        boat  = findViewById(R.id.boat);
 
 
 
@@ -31,6 +32,11 @@ public class Notify extends AppCompatActivity {
 
         network.setOnClickListener(e->{
             openFragment(new ListOfVisitors(),"listVisitors",2, this);
+        });
+
+
+        boat.setOnClickListener(e->{
+            openFragment(new ListOfVisitors(),"listVisitors",3, this);
         });
     }
 

@@ -10,19 +10,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.otec.webdealit.R;
-import com.otec.webdealit.model.ViewCount;
 
 import java.util.List;
+import java.util.Map;
 
 public class DaysCount  extends RecyclerView.Adapter<DaysCount.Myholder> {
 
 
 
-    private List<ViewCount>  list;
+    private List<Map<String,Object>>  list;
     private Context context;
 
 
-    public DaysCount(List<ViewCount> list, Context context) {
+    public DaysCount(List<Map<String,Object>>  list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -38,8 +38,8 @@ public class DaysCount  extends RecyclerView.Adapter<DaysCount.Myholder> {
 
     @Override
     public void onBindViewHolder(@NonNull  DaysCount.Myholder holder, int position) {
-            holder.date.setText(list.get(position).getDate());
-            holder.date.setText(String.valueOf(list.get(position).getCount()));
+            holder.date.setText("Date: "+list.get(position).get("date").toString());
+            holder.count.setText("Visit: "+(list.get(position).get("count").toString()));
     }
 
     @Override

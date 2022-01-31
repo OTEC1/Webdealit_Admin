@@ -6,6 +6,8 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
+        android:backgroundTint="#f5f5f5"
+        android:layout_margin="10dp"
         android:layout_height="wrap_content">
 
         <RelativeLayout
@@ -17,8 +19,7 @@
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="Date: 12 :12" />
+                android:layout_margin="10dp" />
 
 
             <TextView
@@ -26,8 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/date"
-                android:layout_margin="10dp"
-                android:text="Count: 124" />
+                android:layout_margin="10dp" />
 
         </RelativeLayout>
 
