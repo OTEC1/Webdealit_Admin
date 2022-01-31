@@ -345,7 +345,7 @@ public class Music extends Fragment {
         music.put("music_video",format.replace("Music_Thumbnails","Music_Videouploads").replace(".png",".mp4").trim());
         music.put("music_title",title.toLowerCase());
         music.put("music_url",format.replace("Music_Thumbnails","Music_fileuploads").replace(".png",".mp3").trim());
-        music.put("music_artist", artist);
+        music.put("music_artist", artist.toLowerCase());
         music.put("music_year",year);
         music.put("downloadCount",0);
         music.put("viewCount",0);
