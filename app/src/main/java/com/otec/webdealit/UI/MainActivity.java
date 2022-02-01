@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         upload.setOnClickListener(v -> {
-            String format =   generate_name() + new UUID(System.currentTimeMillis(),System.nanoTime())+".png";
+            String format =   generate_name() + new UUID(System.currentTimeMillis(),System.nanoTime())+".jpg";
             if(!title.getText().toString().isEmpty() && !writeup.getText().toString().isEmpty() && uri!= null && youtube.getText().toString().trim().isEmpty() && !tab.equals("Select Option"))
                 AWS(uri,format,p1,p2,p3,tab,1);
             else
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
         m3.put("UserPost",m2);
 
 
-        API_POST(1,m3,BASE_URL_S3 + img,cloud);
+        API_POST(1,m3,BASE_URL_S3 + img,cloud.replace(".jpg",""));
 
     }
 
@@ -241,7 +241,6 @@ public class MainActivity extends AppCompatActivity {
 
 
             if (cloud.trim().length() > 0) {
-
                         Calls caller = Base_config.getConnection().create(Calls.class);
                         Map<String, Object> urls = new HashMap<>();
                         urls.put("url", url);
