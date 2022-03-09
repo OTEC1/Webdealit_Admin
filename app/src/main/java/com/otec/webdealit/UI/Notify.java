@@ -36,8 +36,11 @@ public class Notify extends AppCompatActivity {
 
 
         boat.setOnClickListener(e->{
-            openFragment(new ListOfVisitors(),"listVisitors",3, this);
+            //openFragment(null,"listVisitors",3, this);
         });
+
+
+
     }
 
 

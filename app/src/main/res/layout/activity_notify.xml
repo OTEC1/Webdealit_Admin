@@ -40,6 +40,8 @@
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
             android:text="boatcurise.holiday" />
+
+
     </RelativeLayout>
 
 

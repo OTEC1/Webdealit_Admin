@@ -19,6 +19,8 @@ public interface Calls {
     @GET("webdealit_Movie_categories")
     Call<listOfmoviecategories> getMovie_categories();
 
+    @GET("https://us-central1-chau02-b4019.cloudfunctions.net/getTimeStamp")
+    Call<Object> getTimesTamp();
 
     @GET("webdealit_lock")
     Call<Auth> getAuth();

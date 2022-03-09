@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/home"
-        android:title="Music"
+        android:title="Cyrpto"
         android:icon="@drawable/ic_baseline_post_add_24" />
 
 

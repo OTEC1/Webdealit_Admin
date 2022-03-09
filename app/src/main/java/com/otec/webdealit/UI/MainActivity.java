@@ -112,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
 
         chooseImg.setOnClickListener(v -> filePicker());
 
-
         post_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -138,8 +137,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
-
 
 
     private void AWS(Uri path, String format, String p1, String p2, String p3,String tab,int n){
