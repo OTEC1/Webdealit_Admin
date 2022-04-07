@@ -19,7 +19,7 @@ public interface Calls {
     @GET("webdealit_Movie_categories")
     Call<listOfmoviecategories> getMovie_categories();
 
-    @GET("https://us-central1-chau02-b4019.cloudfunctions.net/getTimeStamp")
+    @GET("https://us-central1-webflystore.cloudfunctions.net/appCat/getTimeStamp")
     Call<Object> getTimesTamp();
 
     @GET("webdealit_lock")
@@ -44,7 +44,7 @@ public interface Calls {
 
 
 
-    @GET("https://us-central1-chau02-b4019.cloudfunctions.net/Zlearner/LearnGetvisitcount")
+    @GET("https://us-central1-webflystore.cloudfunctions.net/Zlearner/LearnGetvisitcount")
     Call<ViewCount>  getVisitCountNetwork();
 
 
